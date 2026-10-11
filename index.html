@@ -105,7 +105,7 @@ button {
 .boy {
   width: 130px;
   height: auto;
-  animation: boyWalk 0.5s infinite alternate;
+  animation: boyWalk 2s ease-out 1 forwades;
 }
 
 .boy1 {
@@ -117,11 +117,17 @@ button {
 }
 
 @keyframes boyWalk {
-  from {
-    transform: translateY(0) rotate(-3deg);
+  0% {
+    transform: translateX(-300px) translateY(0) rotate(-5deg);
   }
-  to {
-    transform: translateY(-8px) rotate(3deg);
+  40% {
+    transform: translateX(-100px) translateY(-5px) rotate(3deg);
+  }
+  70% {
+    transform: translateX(0) translateY(0) rotate(-2deg);
+  }
+  100% {
+    transform: translateX(0) translateY(0) rotate(0deg);
   }
 }
 </style>

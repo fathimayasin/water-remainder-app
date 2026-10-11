@@ -94,6 +94,36 @@ button {
   font-size: 13px;
   color: #526b7d;
 }
+  .boys-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 20px;
+  margin: 20px auto;
+}
+
+.boy {
+  width: 130px;
+  height: auto;
+  animation: boyWalk 0.5s infinite alternate;
+}
+
+.boy1 {
+  animation-delay: 0s;
+}
+
+.boy2 {
+  animation-delay: 0.25s;
+}
+
+@keyframes boyWalk {
+  from {
+    transform: translateY(0) rotate(-3deg);
+  }
+  to {
+    transform: translateY(-8px) rotate(3deg);
+  }
+}
 </style>
 </head>
 
@@ -108,7 +138,10 @@ button {
   <img
     class="boys"
     id="boys"
-    src="boys.jpg.png"
+    <div class="boys-container">
+  <img src="boy1.jpg.png" class="boy boy1" alt="Boy 1">
+  <img src="boy2.jpg.png" class="boy boy2" alt="Boy 2">
+</div>
     alt="Two little boys holding a water bottle"
   >
 

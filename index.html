@@ -53,17 +53,30 @@ h1 {
   max-width: 350px;
   height: 280px;
   object-fit: contain;
+  border-radius: 20px;
   animation: arrive 1.2s ease-out both;
 }
 
-boys arrive {
-  from { transform: translateX(-120vw); }
-  to { transform: translateX(0); }
+@keyframes arrive {
+  from {
+    transform: translateX(-120vw);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
-boys leave {
-  from { transform: translateX(0); opacity: 1; }
-  to { transform: translateX(120vw); opacity: 0; }
+@keyframes leave {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(120vw);
+    opacity: 0;
+  }
 }
 
 .boys.leaving {
@@ -141,15 +154,16 @@ button {
     Amma, it's time to drink your water!
   </div>
 
-  <img
+  <video
     class="boys"
     id="boys"
-    <div class="boys-container">
-  <img src="boy1.jpg.png" class="boy boy1" alt="Boy 1">
-  <img src="boy2.jpg.png" class="boy boy2" alt="Boy 2">
-</div>
-    alt="Two little boys holding a water bottle"
+    autoplay
+    muted
+    playsinline
+    loop
   >
+    <source src="boys-reminder.mp4" type="video/mp4">
+  </video>
 
   <div class="buttons" id="buttons">
     <button class="yes" onclick="answerYes()">

@@ -1,16 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ta">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nova Water Reminder</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#63c9f4">
+<link rel="manifest" href="manifest.json">
+<title>Water Reminder</title>
 <style>
-body{font-family:Arial,sans-serif;background:#eaf8ff;text-align:center;padding:20px;color:#17445c}
-.app{max-width:380px;margin:30px auto;background:white;padding:25px;border-radius:24px;box-shadow:0 5px 20px #c4e5f3}
-h1{color:#0787c9}
-.glass{font-size:70px;margin:15px}
-button{background:#0787c9;color:white;border:0;padding:13px 20px;border-radius:12px;font-size:16px;margin:6px;cursor:pointer}
-button:hover{background:#05699c}
+*{box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:linear-gradient(#dff6ff,#f5fcff);text-align:center;padding:15px;color:#17445c;margin:0}
+.app{max-width:390px;margin:20px auto;background:white;padding:22px;border-radius:26px;box-shadow:0 6px 22px #b9deed}
+h1{color:#0787c9;font-size:27px}
+.character{font-size:100px;line-height:1.25}
+.bubble{background:#e7f7ff;border-radius:18px;padding:14px;margin:12px 0;font-size:18px;font-weight:bold}
+button{background:#0787c9;color:white;border:0;padding:13px 16px;border-radius:13px;font-size:16px;margin:5px;cursor:pointer}
+button:active{transform:scale(.97)}
+.secondary{background:#ff9f43}
 .progress{background:#dceef7;border-radius:20px;height:16px;overflow:hidden}
 #bar{height:100%;width:0;background:#08a9e0;transition:width .3s}
 small{color:#557787}
@@ -18,50 +23,102 @@ small{color:#557787}
 </head>
 <body>
 <div class="app">
-<h1>💧 Nova Water Reminder</h1>
-<p>Stay hydrated, stay healthy!</p>
-<div class="glass">🥤</div>
+<h1>💧 Water Reminder</h1>
+<p>தண்ணீர் குடிப்போம்! ஆரோக்கியமாக இருப்போம்!</p>
+
+<div class="character" role="img" aria-label="Cute cartoon boy">👦🏻🧴</div>
+<div class="bubble" id="speech">ஹாய் அம்மா! தண்ணீர் குடிக்கலாமா? 💙</div>
+<button class="secondary" onclick="speakTamil()">🗣️ பேசச் சொல்</button>
+
+<hr>
 <h2 id="count">0 ml</h2>
-<p id="goalText">Daily goal: 2000 ml</p>
+<p>தினசரி இலக்கு: 2000 ml</p>
 <div class="progress"><div id="bar"></div></div>
 <p id="percent">0% completed</p>
+
 <button onclick="addWater(250)">+ 250 ml</button>
 <button onclick="addWater(500)">+ 500 ml</button>
 <button onclick="resetWater()">Reset</button>
+
 <hr>
-<h3>⏰ Water Reminder</h3>
-<p id="reminder">Reminders are off</p>
-<button onclick="toggleReminder()">Turn Reminder On/Off</button>
-<small><p>Small sips, big benefits 💙</p></small>
+<h3>⏰ தண்ணீர் நினைவூட்டல்</h3>
+<p id="reminder">நினைவூட்டல் நிறுத்தப்பட்டுள்ளது</p>
+<label for="interval">எத்தனை நிமிடங்களுக்கு ஒருமுறை?</label><br>
+<select id="interval" style="padding:10px;border-radius:10px;margin:10px">
+<option value="30">30 நிமிடங்கள்</option>
+<option value="60" selected>1 மணி நேரம்</option>
+<option value="90">90 நிமிடங்கள்</option>
+<option value="120">2 மணி நேரம்</option>
+</select><br>
+<button onclick="toggleReminder()">Reminder On / Off</button>
+<p><small>சிறிது சிறிதாகத் தண்ணீர் குடியுங்கள்! 💙</small></p>
 </div>
+
 <script>
 let total=Number(localStorage.getItem("novaWater")||0);
 let reminderOn=false;
+let waterTimer=null;
+
 function update(){
-document.getElementById("count").textContent=total+" ml";
-let p=Math.min(100,Math.round(total/2000*100));
-document.getElementById("bar").style.width=p+"%";
-document.getElementById("percent").textContent=p+"% completed";
-localStorage.setItem("novaWater",total);
+ document.getElementById("count").textContent=total+" ml";
+ let p=Math.min(100,Math.round(total/2000*100));
+ document.getElementById("bar").style.width=p+"%";
+ document.getElementById("percent").textContent=p+"% completed";
+ localStorage.setItem("novaWater",total);
 }
+
+function speakTamil(){
+ const text="அம்மா, தண்ணி குடிங்க! உடம்புக்கு நல்லது. வாங்க, கொஞ்சம் தண்ணீர் குடிப்போம்!";
+ document.getElementById("speech").textContent=text;
+ if(!("speechSynthesis" in window)){
+  alert("இந்த browser-ல் குரல் வசதி கிடைக்கவில்லை.");
+  return;
+ }
+ window.speechSynthesis.cancel();
+ const msg=new SpeechSynthesisUtterance(text);
+ msg.lang="ta-IN";
+ msg.rate=0.85;
+ msg.pitch=1.25;
+ const voices=window.speechSynthesis.getVoices();
+ const tamilVoice=voices.find(v=>v.lang.toLowerCase().startsWith("ta"));
+ if(tamilVoice)msg.voice=tamilVoice;
+ window.speechSynthesis.speak(msg);
+}
+
+function remind(){
+ const text="அம்மா, தண்ணி குடிங்க! வாங்க, தண்ணீர் குடிப்போம்!";
+ document.getElementById("speech").textContent=text;
+ speakTamil();
+ if("Notification" in window && Notification.permission==="granted"){
+  new Notification("💧 Water Reminder",{body:text});
+ }
+}
+
 function addWater(n){total+=n;update();}
 function resetWater(){total=0;update();}
-function toggleReminder(){
-reminderOn=!reminderOn;
-document.getElementById("reminder").textContent=reminderOn?"Reminder on (keep this page open)":"Reminders are off";
-if(reminderOn){
-if("Notification" in window && Notification.permission==="default"){
-Notification.requestPermission();
+
+async function toggleReminder(){
+ if(reminderOn){
+  reminderOn=false;
+  clearInterval(waterTimer);
+  document.getElementById("reminder").textContent="நினைவூட்டல் நிறுத்தப்பட்டது";
+  return;
+ }
+ if("Notification" in window && Notification.permission==="default"){
+  try{await Notification.requestPermission();}catch(e){}
+ }
+ reminderOn=true;
+ const mins=Number(document.getElementById("interval").value);
+ document.getElementById("reminder").textContent=
+ "நினைவூட்டல் இயங்குகிறது — ஒவ்வொரு "+mins+" நிமிடங்களுக்கும். App திறந்திருக்க வேண்டும்.";
+ remind();
+ waterTimer=setInterval(remind,mins*60*1000);
 }
-if(window.waterTimer)clearInterval(window.waterTimer);
-window.waterTimer=setInterval(()=>{
-if(reminderOn && "Notification" in window && Notification.permission==="granted"){
-new Notification("Nova Water Reminder",{body:"Time to drink some water! 💧"});
-}
-},60*60*1000);
-}else{
-if(window.waterTimer)clearInterval(window.waterTimer);
-}
+
+if("serviceWorker" in navigator){
+ window.addEventListener("load",()=>{
+  navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+ });
 }
 update();
 </script>

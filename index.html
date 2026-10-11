@@ -77,6 +77,9 @@ function speakTamil(){
  window.speechSynthesis.cancel();
  const msg=new SpeechSynthesisUtterance(text);
  msg.lang="ta-IN";
+ msg.rate = 0.88;
+msg.pitch = 1.5;
+msg.volume = 0.8;
  msg.rate=0.85;
  msg.pitch=1.25;
  const voices=window.speechSynthesis.getVoices();

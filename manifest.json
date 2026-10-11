@@ -1,0 +1,11 @@
+{
+  "name": "Water Reminder",
+  "short_name": "Water",
+  "description": "Daily water drinking reminder app",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eaf8ff",
+  "theme_color": "#2196f3",
+  "icons": []
+}

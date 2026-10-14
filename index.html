@@ -602,7 +602,10 @@ function showPair() {
 function startReminder() {
   clearTimers();
   const token = ++currentSceneToken;
-
+document.querySelector(".app").classList.remove("hidden");
+document.querySelector("h1").classList.remove("hidden");
+statusText.classList.remove("hidden");
+  
   buttons.classList.add("hidden");
   message.classList.add("hidden");
 
@@ -714,16 +717,26 @@ function exitAfterScene(minutes) {
 
   buttons.classList.add("hidden");
 
+  // Hide all reminder text when boys leave
+  message.classList.add("hidden");
+  statusText.classList.add("hidden");
+
   sceneTimer = setTimeout(() => {
     if (token !== currentSceneToken) return;
 
     scene.className = "scene";
     scene.innerHTML = "";
 
+    // Hide the entire reminder content
+    document.querySelector("h1").classList.add("hidden");
+    document.querySelector(".app").classList.add("hidden");
+
     scheduleReminder(minutes);
 
   }, isSad ? 3000 : 2200);
 }
+
+  
 
 /* USER DRANK WATER */
 function answerYes() {

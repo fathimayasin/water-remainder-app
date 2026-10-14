@@ -4,148 +4,249 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#d9f5ff">
+
 <title>Nova Water Reminder</title>
 
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: Trebuchet MS, sans-serif;
-  text-align: center;
+  font-family: "Trebuchet MS", sans-serif;
   color: #24415a;
-  background: linear-gradient(160deg, #dff7ff, #fff0f7, #fff8d9);
+  background: transparent;
   overflow-x: hidden;
 }
 
+/* SMALL REMINDER WINDOW */
 .app {
-  width: 100%;
-  max-width: 520px;
-  min-height: 100vh;
-  margin: auto;
-  padding: 22px 16px;
+  position: fixed;
+  top: 12px;
+  right: 12px;
+
+  width: min(350px, calc(100vw - 24px));
+  min-height: 0;
+
+  margin: 0;
+  padding: 14px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 16px;
+  gap: 8px;
+
+  background: linear-gradient(
+    145deg,
+    #effcff,
+    #fff2f8,
+    #fffbea
+  );
+
+  border: 1px solid #d5edf5;
+  border-radius: 20px;
+
+  box-shadow: 0 8px 28px #24415a22;
+
+  z-index: 1000;
 }
 
 h1 {
-  font-size: 28px;
+  font-size: 20px;
   margin: 0;
 }
 
+/* MESSAGE */
 .message {
   width: 100%;
-  padding: 12px 0;
-  box-sizing: border-box;
+  padding: 5px 0;
+
   background: transparent;
   border: none;
-  border-radius: 0;
   box-shadow: none;
 
-  font-family: 'Trebuchet MS', sans-serif;
-  font-size: 25px;
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 18px;
   font-weight: 800;
-  line-height: 1.5;
-  letter-spacing: 0.3px;
+  line-height: 1.4;
 
   color: #176b87;
   text-align: center;
 
-  animation: messagePop .7s ease both;
-}
-
-.scene {
-  width: 100%;
-  min-height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  position: relative;
-  overflow: hidden;
-}
-
-.scene img {
-  display: block;
-  width: 100%;
-  max-width: 350px;
-  height: 280px;
-  object-fit: contain;
-  border-radius: 18px;
-}
-
-.scene.pair img {
-  width: 48%;
-  height: 260px;
+  animation: messagePop .5s ease both;
 }
 
 .hidden {
   display: none !important;
 }
 
-/* Cute energetic entrance */
-.entering {
-  animation: actionEntry 1.8s cubic-bezier(.25,1.2,.35,1) both;
+/* CARTOON SCENE */
+.scene {
+  width: 100%;
+  height: 155px;
+  min-height: 155px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  position: relative;
+  overflow: hidden;
+
+  transform-origin: center;
 }
 
-@keyframes actionEntry {
+.scene img {
+  display: block;
+
+  width: 100%;
+  max-width: 230px;
+  height: 150px;
+
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+/* TWO BOYS */
+.scene.pair img {
+  width: 49%;
+  height: 135px;
+  max-width: 155px;
+}
+
+/*
+  Walking-style body movement.
+  Static images cannot move their legs independently.
+*/
+.walkingBody {
+  animation: walkBob .48s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+/* WALKING-STYLE BOUNCE */
+@keyframes walkBob {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-3px) rotate(-1deg);
+  }
+
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  75% {
+    transform: translateY(-2px) rotate(1deg);
+  }
+}
+
+/* HOLDING IMAGE WALKS IN */
+.scene.walk-in {
+  animation: walkIn 1.8s ease-out both;
+}
+
+@keyframes walkIn {
   0% {
     opacity: 0;
-    transform: translateX(-110vw) scale(.55) rotate(-12deg);
+    transform: translateX(-65px);
   }
-  55% {
+
+  30% {
     opacity: 1;
-    transform: translateX(25px) scale(1.12) rotate(5deg);
+    transform: translateX(-45px);
   }
-  72% {
-    transform: translateX(-12px) scale(.96) rotate(-3deg);
+
+  65% {
+    opacity: 1;
+    transform: translateX(-12px);
   }
-  88% {
-    transform: translateX(5px) scale(1.03) rotate(1deg);
-  }
+
   100% {
     opacity: 1;
-    transform: translateX(0) scale(1) rotate(0);
+    transform: translateX(0);
   }
 }
 
-/* Drinking scene pop and shake */
-.drinkEntry {
-  animation: drinkPop .75s cubic-bezier(.2,1.7,.4,1) both;
+/* DRINKING PAIR ENTERS */
+.scene.pairWalkIn {
+  animation: pairWalkIn 1.5s ease-out both;
 }
 
-@keyframes drinkPop {
-  0% { opacity: 0; transform: scale(.25) rotate(-8deg); }
-  65% { opacity: 1; transform: scale(1.12) rotate(4deg); }
-  80% { transform: scale(.94) rotate(-3deg); }
-  100% { opacity: 1; transform: scale(1) rotate(0); }
+@keyframes pairWalkIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+
+  25% {
+    opacity: 1;
+    transform: translateX(-25px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateX(-8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-.pair img:first-child {
-  animation: leftBoy .8s ease-out both;
+/* HAPPY SCENE */
+.scene.happy-scene {
+  animation: happyArrive .9s ease-out both;
 }
 
-.pair img:last-child {
-  animation: rightBoy .8s ease-out both;
+@keyframes happyArrive {
+  0% {
+    opacity: 0;
+    transform: scale(.85) translateY(10px);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scale(1.03) translateY(-2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
-@keyframes leftBoy {
-  from { opacity: 0; transform: translateX(-100px) rotate(-12deg); }
-  to { opacity: 1; transform: translateX(0) rotate(0); }
+/* SAD SCENE */
+.scene.sad-scene {
+  animation: sadPop .7s ease-out both;
 }
 
-@keyframes rightBoy {
-  from { opacity: 0; transform: translateX(100px) rotate(12deg); }
-  to { opacity: 1; transform: translateX(0) rotate(0); }
+@keyframes sadPop {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(.85);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.03);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
+/* BUTTONS */
 .buttons {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
@@ -153,17 +254,24 @@ h1 {
 
 button {
   border: none;
-  border-radius: 18px;
-  padding: 15px 18px;
-  font-size: 16px;
+  border-radius: 14px;
+
+  padding: 11px 12px;
+
+  font-size: 13px;
   font-weight: bold;
+
   cursor: pointer;
-  box-shadow: 0 4px 10px #00000018;
-  transition: transform .18s, box-shadow .18s;
+
+  box-shadow: 0 3px 8px #00000015;
+
+  transition:
+    transform .18s,
+    box-shadow .18s;
 }
 
 button:active {
-  transform: scale(.9);
+  transform: scale(.94);
 }
 
 .yes {
@@ -176,55 +284,77 @@ button:active {
   color: #70420a;
 }
 
-.yes:hover, .no:hover {
-  transform: translateY(-3px) scale(1.04);
-  box-shadow: 0 8px 18px #00000020;
+.yes:hover,
+.no:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px #00000020;
 }
 
 .small {
-  font-size: 13px;
+  font-size: 12px;
   color: #526b7d;
+  text-align: center;
 }
 
-/* Celebration */
+/* HAPPY DANCE */
 .celebrating {
   animation: happyDance 1s ease-in-out 2;
 }
 
 @keyframes happyDance {
-  0%, 100% { transform: translateX(0) rotate(0) scale(1); }
-  20% { transform: translateX(-9px) rotate(-5deg) scale(1.04); }
-  40% { transform: translateX(9px) rotate(5deg) scale(1.08); }
-  60% { transform: translateY(-12px) rotate(-3deg) scale(1.04); }
-  80% { transform: translateY(3px) rotate(3deg) scale(1); }
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-5px) rotate(-3deg);
+  }
+
+  50% {
+    transform: translateY(0) rotate(3deg);
+  }
+
+  75% {
+    transform: translateY(-4px) rotate(-2deg);
+  }
 }
 
+/* CONFETTI */
 .confetti {
   position: fixed;
   top: -25px;
+
   width: 10px;
   height: 16px;
-  z-index: 10;
+
+  z-index: 1010;
   pointer-events: none;
+
   animation: confettiFall 2.4s linear forwards;
 }
 
 @keyframes confettiFall {
-  0% { transform: translateY(-20px) rotate(0); opacity: 1; }
-  100% { transform: translateY(110vh) rotate(900deg); opacity: 0; }
+  0% {
+    transform: translateY(-20px) rotate(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(110vh) rotate(900deg);
+    opacity: 0;
+  }
 }
 
-/* Sad scene */
-.sadEntry {
-  animation: sadPop .65s ease-out both;
-}
-/* Cute tears for sad boys */
+/* SAD TEARS */
 .tear {
   position: fixed;
   top: -25px;
-  z-index: 15;
+
+  z-index: 1010;
   pointer-events: none;
+
   font-size: 20px;
+
   animation: tearFall 2.5s linear forwards;
 }
 
@@ -233,84 +363,145 @@ button:active {
     transform: translateY(0) scale(.7);
     opacity: 0;
   }
+
   15% {
     opacity: .9;
   }
+
   100% {
     transform: translateY(75vh) scale(1.1);
     opacity: 0;
   }
 }
-@keyframes sadPop {
-  0% { opacity: 0; transform: scale(.65) translateY(35px); }
-  65% { opacity: 1; transform: scale(1.06) translateY(-5px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
+
+/* SLOW EXIT FOR HAPPY AND OTHER SCENES */
+.scene.leaving {
+  animation: walkOut 2.2s ease-in forwards !important;
 }
 
-/* Exit */
-.leaving {
-  animation: exitScene .9s ease-in forwards !important;
-}
-
-@keyframes exitScene {
-  0% { opacity: 1; transform: translateX(0) scale(1); }
-  40% { opacity: 1; transform: translateX(20px) scale(1.04) rotate(3deg); }
-  100% { opacity: 0; transform: translateX(110vw) scale(.7) rotate(12deg); }
-}
-
-/* Slow, gentle exit for sad boys */
-.sadLeaving {
-  animation: sadExit 2s ease-in-out forwards !important;
-}
-
-@keyframes sadExit {
+@keyframes walkOut {
   0% {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: translateX(0);
   }
-  60% {
+
+  25% {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: translateX(8px);
   }
+
   100% {
     opacity: 0;
-    transform: translateX(0) scale(.92);
+    transform: translateX(110vw);
   }
 }
-  
+
+/* SAD BOYS: HOLD, THEN WALK OUT */
+.scene.sadLeaving {
+  animation: sadWalkOut 3s ease-in-out forwards !important;
+}
+
+@keyframes sadWalkOut {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  25% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(110vw);
+  }
+}
+
+/* MESSAGE ANIMATION */
 @keyframes messagePop {
-  from { opacity: 0; transform: translateY(18px) scale(.9); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* SMALL SCREENS */
+@media (max-width: 380px) {
+  .app {
+    top: 8px;
+    right: 8px;
+    width: calc(100vw - 16px);
+    padding: 10px;
+  }
+
+  .scene {
+    height: 135px;
+    min-height: 135px;
+  }
+
+  .scene img {
+    height: 130px;
+  }
+
+  .scene.pair img {
+    height: 120px;
+  }
+
+  .message {
+    font-size: 16px;
+  }
+
+  button {
+    padding: 10px;
+    font-size: 12px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
   }
 }
 </style>
 </head>
 
 <body>
+
 <main class="app">
+
   <h1>💧 Water Time! 💧</h1>
 
   <div class="message hidden" id="message"></div>
 
-  <div class="scene" id="scene">
-    <img id="holding" class="entering"
-         src="boys-holding.png.png"
-         alt="Both boys holding their water bottles">
+  <div class="scene walk-in" id="scene">
+    <img
+      class="walkingBody"
+      src="boys-holding.png.png"
+      alt="Both boys holding their water bottles"
+    >
   </div>
 
   <div class="buttons hidden" id="buttons">
-    <button class="yes" onclick="answerYes()">💚 YES, I drank it!</button>
-    <button class="no" onclick="answerNo()">💧 NOT NOW</button>
+    <button class="yes" onclick="answerYes()">
+      💚 YES, I drank it!
+    </button>
+
+    <button class="no" onclick="answerNo()">
+      💧 NOT NOW
+    </button>
   </div>
 
-  <div class="small" id="status">Your little water buddies are coming! 💙</div>
+  <div class="small" id="status">
+    Your little water buddies are coming! 💙
+  </div>
+
 </main>
 
 <script>
@@ -341,41 +532,68 @@ function clearTimers() {
 function setMessage(text) {
   message.classList.remove("hidden");
   message.textContent = text;
+
   message.style.animation = "none";
   void message.offsetWidth;
+
   message.style.animation = "messagePop .5s ease both";
 }
 
+/* SHOW SINGLE IMAGE WITH WALKING-STYLE MOVEMENT */
 function showImage(src, alt, className = "") {
   scene.className = "scene";
   scene.innerHTML = "";
 
   const img = document.createElement("img");
+
   img.src = src;
   img.alt = alt;
-  img.className = className;
+  img.className = "walkingBody";
+
   scene.appendChild(img);
+
+  if (className.includes("sadEntry")) {
+    scene.classList.add("sad-scene");
+  } else if (className.includes("celebrating")) {
+    scene.classList.add("happy-scene");
+  } else {
+    scene.classList.add("walk-in");
+  }
 
   return img;
 }
 
+/* SHOW BOTH DRINKING IMAGES */
 function showPair() {
-  scene.className = "scene pair drinkEntry";
+  scene.className = "scene pair pairWalkIn";
+
   scene.innerHTML = `
-    <img src="${FILES.boy1}" alt="First boy drinking water">
-    <img src="${FILES.boy2}" alt="Second boy drinking water">
+    <img
+      class="walkingBody"
+      src="${FILES.boy1}"
+      alt="First boy drinking water"
+    >
+
+    <img
+      class="walkingBody"
+      src="${FILES.boy2}"
+      alt="Second boy drinking water"
+    >
   `;
 }
 
+/* START WATER REMINDER */
 function startReminder() {
   clearTimers();
+
   const token = ++currentSceneToken;
 
   buttons.classList.add("hidden");
   message.classList.add("hidden");
+
   statusText.textContent = "Here come your water buddies! 💙";
 
-  const holding = showImage(
+  showImage(
     FILES.holding,
     "Both boys holding water bottles",
     "entering"
@@ -390,27 +608,65 @@ function startReminder() {
       if (token !== currentSceneToken) return;
 
       setMessage("Amma, it's time to drink your water! 💧");
+
       buttons.classList.remove("hidden");
+
       statusText.textContent = "Let's drink water together! 🥤";
+
     }, 2500);
+
   }, 4000);
 }
 
+/* CONFETTI EFFECT */
 function makeConfetti() {
-  const shapes = ["🎉", "✨", "💚", "💛", "🩷", "🟦"];
+  const shapes = [
+    "🎉", "✨", "💚", "💛", "🩷", "🟦"
+  ];
 
   for (let i = 0; i < 45; i++) {
     const piece = document.createElement("div");
+
     piece.className = "confetti";
-    piece.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+
+    piece.textContent =
+      shapes[Math.floor(Math.random() * shapes.length)];
+
     piece.style.left = Math.random() * 100 + "vw";
-    piece.style.animationDelay = Math.random() * .8 + "s";
-    piece.style.fontSize = (12 + Math.random() * 14) + "px";
+
+    piece.style.animationDelay =
+      Math.random() * .8 + "s";
+
+    piece.style.fontSize =
+      (12 + Math.random() * 14) + "px";
+
     document.body.appendChild(piece);
+
     setTimeout(() => piece.remove(), 3500);
   }
 }
 
+/* SAD TEARS EFFECT */
+function makeTears() {
+  for (let i = 0; i < 45; i++) {
+    const tear = document.createElement("div");
+
+    tear.className = "tear";
+    tear.textContent = "💧";
+
+    tear.style.left =
+      (10 + Math.random() * 80) + "vw";
+
+    tear.style.animationDelay =
+      Math.random() * .5 + "s";
+
+    document.body.appendChild(tear);
+
+    setTimeout(() => tear.remove(), 4500);
+  }
+}
+
+/* SCHEDULE NEXT REMINDER */
 function scheduleReminder(minutes) {
   clearTimeout(reminderTimer);
 
@@ -420,22 +676,30 @@ function scheduleReminder(minutes) {
   reminderTimer = setTimeout(() => {
     startReminder();
 
-    if ("Notification" in window &&
-        Notification.permission === "granted") {
+    if (
+      "Notification" in window &&
+      Notification.permission === "granted"
+    ) {
       new Notification("Water Reminder", {
         body: "Amma, it's time to drink your water!"
       });
     }
+
   }, minutes * 60 * 1000);
 }
 
+/* SLOW EXIT */
 function exitAfterScene(minutes) {
   const token = currentSceneToken;
-  if (scene.querySelector('img')?.classList.contains('sadEntry')) {
-  scene.classList.add("sadLeaving");
-} else {
-  scene.classList.add("leaving");
-}
+
+  const isSad = scene.classList.contains("sad-scene");
+
+  if (isSad) {
+    scene.classList.add("sadLeaving");
+  } else {
+    scene.classList.add("leaving");
+  }
+
   buttons.classList.add("hidden");
 
   sceneTimer = setTimeout(() => {
@@ -443,75 +707,83 @@ function exitAfterScene(minutes) {
 
     scene.className = "scene";
     scene.innerHTML = "";
+
     scheduleReminder(minutes);
-  }, 950);
+
+  }, isSad ? 3000 : 2200);
 }
 
+/* USER DRANK WATER */
 function answerYes() {
   clearTimeout(sceneTimer);
+
   ++currentSceneToken;
 
-  setMessage("Super Amma! 🎉💖 See you in 60 minutes! 💧");
+  setMessage(
+    "Super Amma! 🎉💖 See you in 60 minutes! 💧"
+  );
+
   buttons.classList.add("hidden");
 
-  const img = showImage(
+  showImage(
     FILES.happy,
     "Both boys celebrating happily",
     "drinkEntry celebrating"
   );
 
   makeConfetti();
+
   confettiTimer = setInterval(makeConfetti, 1800);
 
   statusText.textContent = "Yay! Great job, Amma! 💚";
 
   sceneTimer = setTimeout(() => {
     clearInterval(confettiTimer);
+
     exitAfterScene(60);
+
   }, 3200);
 }
 
+/* USER HAS NOT DRANK WATER */
 function answerNo() {
   clearTimeout(sceneTimer);
+
   ++currentSceneToken;
 
-  setMessage("It's okay, Amma! We'll come back in 10 minutes. 💧");
+  setMessage(
+    "It's okay, Amma! We'll come back in 10 minutes. 💧"
+  );
+
   buttons.classList.add("hidden");
 
   showImage(
-  FILES.sad,
-  "Both boys looking sad",
-  "sadEntry"
-);
+    FILES.sad,
+    "Both boys looking sad",
+    "sadEntry"
+  );
 
-function makeTears() {
-  for (let i = 0; i < 45; i++) {
-    const tear = document.createElement("div");
-    tear.className = "tear";
-    tear.textContent = "💧";
-    tear.style.left = (10 + Math.random() * 80) + "vw";
-    tear.style.animationDelay = (Math.random() * 0.5) + "s";
-    document.body.appendChild(tear);
+  makeTears();
 
-    setTimeout(() => tear.remove(), 4500);
-  }
-}
-
-makeTears();
-
-  statusText.textContent = "We'll remind you again soon. 💙";
+  statusText.textContent =
+    "We'll remind you again soon. 💙";
 
   sceneTimer = setTimeout(() => {
     exitAfterScene(10);
   }, 4000);
 }
 
-if ("Notification" in window &&
-    Notification.permission === "default") {
+/* NOTIFICATION PERMISSION */
+if (
+  "Notification" in window &&
+  Notification.permission === "default"
+) {
   Notification.requestPermission();
 }
 
+/* START APP */
 startReminder();
 </script>
+
 </body>
 </html>

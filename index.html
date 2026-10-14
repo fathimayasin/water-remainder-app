@@ -258,6 +258,26 @@ button:active {
   100% { opacity: 0; transform: translateX(110vw) scale(.7) rotate(12deg); }
 }
 
+/* Slow, gentle exit for sad boys */
+.sadLeaving {
+  animation: sadExit 2s ease-in-out forwards !important;
+}
+
+@keyframes sadExit {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0) scale(.92);
+  }
+}
+  
 @keyframes messagePop {
   from { opacity: 0; transform: translateY(18px) scale(.9); }
   to { opacity: 1; transform: translateY(0) scale(1); }
@@ -411,7 +431,11 @@ function scheduleReminder(minutes) {
 
 function exitAfterScene(minutes) {
   const token = currentSceneToken;
+  if (scene.querySelector('img')?.classList.contains('sadEntry')) {
+  scene.classList.add("sadLeaving");
+} else {
   scene.classList.add("leaving");
+}
   buttons.classList.add("hidden");
 
   sceneTimer = setTimeout(() => {

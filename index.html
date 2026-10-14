@@ -577,7 +577,6 @@ function showPair() {
 /* START WATER REMINDER */
 function startReminder() {
   clearTimers();
-
   const token = ++currentSceneToken;
 
   buttons.classList.add("hidden");
@@ -594,21 +593,18 @@ function startReminder() {
   sceneTimer = setTimeout(() => {
     if (token !== currentSceneToken) return;
 
+    // Drinking pictures appear
     showPair();
 
-    sceneTimer = setTimeout(() => {
-      if (token !== currentSceneToken) return;
+    // Message appears at the SAME time
+    setMessage("Amma, it's time to drink your water! 💧");
 
-      setMessage("Amma, it's time to drink your water! 💧");
-
-      buttons.classList.remove("hidden");
-
-      statusText.textContent = "Let's drink water together! 🥤";
-
-    }, 2500);
+    buttons.classList.remove("hidden");
+    statusText.textContent = "Let's drink water together! 🥤";
 
   }, 4000);
 }
+  
 
 /* CONFETTI EFFECT */
 function makeConfetti() {

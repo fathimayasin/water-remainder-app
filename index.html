@@ -461,6 +461,20 @@ button:active {
     animation-iteration-count: 1 !important;
   }
 }
+/* Remove the reminder card background completely */
+html,
+body {
+  background: transparent !important;
+}
+
+.app {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+  
 </style>
 </head>
 
@@ -593,10 +607,9 @@ function startReminder() {
   sceneTimer = setTimeout(() => {
     if (token !== currentSceneToken) return;
 
-    // Drinking pictures appear
     showPair();
 
-    // Message appears at the SAME time
+    // Image and message appear together
     setMessage("Amma, it's time to drink your water! 💧");
 
     buttons.classList.remove("hidden");
@@ -604,7 +617,8 @@ function startReminder() {
 
   }, 4000);
 }
-  
+
+
 
 /* CONFETTI EFFECT */
 function makeConfetti() {

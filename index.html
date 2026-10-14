@@ -26,24 +26,21 @@ body {
   position: fixed;
   top: 12px;
   right: 12px;
-
   width: min(350px, calc(100vw - 24px));
   min-height: 0;
-
   margin: 0;
   padding: 14px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
   z-index: 1000;
+}
 
 h1 {
   font-size: 20px;
@@ -474,7 +471,20 @@ body {
   box-shadow: none !important;
   outline: none !important;
 }
-  
+ html,
+body,
+.app,
+#scene,
+#message {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.app {
+  border-radius: 0 !important;
+} 
 </style>
 </head>
 

@@ -12,7 +12,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: Arial, sans-serif;
+  font-family: Trebuchet MS, sans-serif;
   text-align: center;
   color: #24415a;
   background: linear-gradient(160deg, #dff7ff, #fff0f7, #fff8d9);
@@ -39,14 +39,23 @@ h1 {
 
 .message {
   width: 100%;
-  padding: 16px;
-  border-radius: 22px;
-  background: white;
-  box-shadow: 0 5px 18px #8ab6c533;
-  font-size: 22px;
-  font-weight: bold;
-  line-height: 1.45;
-  animation: messagePop .5s ease both;
+  padding: 12px 0;
+  box-sizing: border-box;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1.5;
+  letter-spacing: 0.3px;
+
+  color: #176b87;
+  text-align: center;
+
+  animation: messagePop .7s ease both;
 }
 
 .scene {
@@ -452,12 +461,12 @@ function answerNo() {
 );
 
 function makeTears() {
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 45; i++) {
     const tear = document.createElement("div");
     tear.className = "tear";
     tear.textContent = "💧";
     tear.style.left = (10 + Math.random() * 80) + "vw";
-    tear.style.animationDelay = (Math.random() * 1.5) + "s";
+    tear.style.animationDelay = (Math.random() * 0.5) + "s";
     document.body.appendChild(tear);
 
     setTimeout(() => tear.remove(), 4500);

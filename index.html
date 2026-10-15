@@ -809,6 +809,19 @@ if (
 
 /* START APP */
 startReminder();
+  /* REGISTER SERVICE WORKER */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./Service-worker.js")
+      .then(() => {
+        console.log("Nova Water Reminder Service Worker registered");
+      })
+      .catch((error) => {
+        console.error("Service Worker registration failed:", error);
+      });
+  });
+}
 </script>
 
 </body>

@@ -810,7 +810,7 @@ if (
 /* START APP */
 startReminder();
   /* REGISTER SERVICE WORKER */
-if ("serviceworker" in navigator) {
+if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("./service-worker.js")

@@ -1,7 +1,8 @@
 {
-  "name": "Water Reminder",
-  "short_name": "Water",
-  "description": "Daily water drinking reminder app",
+  "id": "./",
+  "name": "Nova Water Reminder",
+  "short_name": "Nova Water",
+  "description": "Amma, it's time to drink your water!",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

@@ -2,11 +2,18 @@
   "id": "./",
   "name": "Nova Water Reminder",
   "short_name": "Nova Water",
-  "description": "Amma, it's time to drink your water!",
+  "description": "Nova Water Reminder app",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#eaf8ff",
   "theme_color": "#2196f3",
-  "icons": []
+  "icons": [
+    {
+      "src": "./boys.jpg.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
 }

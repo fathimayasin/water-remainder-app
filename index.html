@@ -810,10 +810,10 @@ if (
 /* START APP */
 startReminder();
   /* REGISTER SERVICE WORKER */
-if ("serviceWorker" in navigator) {
+if ("serviceworker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./Service-worker.js")
+      .register("./service-worker.js")
       .then(() => {
         console.log("Nova Water Reminder Service Worker registered");
       })

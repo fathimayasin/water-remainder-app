@@ -10,7 +10,7 @@
   "theme_color": "#2196f3",
   "icons": [
     {
-      "src": "./boys.jpg.png",
+      "src": "./boys-holding.png.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

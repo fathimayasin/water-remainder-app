@@ -7,663 +7,846 @@
 
 <title>Nova Water Reminder</title>
 
-<link rel="manifest" href="manifest.json">
-
 <style>
 * {
   box-sizing: border-box;
 }
 
-html,
 body {
   margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100%;
-}
-
-body {
+  min-height: 100vh;
   font-family: "Trebuchet MS", sans-serif;
+  color: #24415a;
   background: transparent;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
+/* SMALL REMINDER WINDOW */
 .app {
-  width: 350px;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 12px;
-  text-align: center;
-  background: transparent;
-  border-radius: 24px;
-  position: relative;
-  overflow: hidden;
-}
-
-.status {
-  font-size: 15px;
-  font-weight: bold;
-  color: #1677a8;
-  margin: 6px 0 10px;
-}
-
-.message {
-  font-size: 18px;
-  font-weight: bold;
-  line-height: 1.4;
-  color: #087ca7;
-  margin: 10px 0;
-}
-
-.character-area {
-  width: 100%;
-  min-height: 250px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.character {
-  display: block;
-  max-width: 100%;
-  max-height: 280px;
-  object-fit: contain;
-  margin: auto;
-}
-
-.holding-character {
-  animation: walkIn 1.2s ease-out both;
-}
-
-.drinking-pair {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  width: 100%;
-}
-
-.drinking-pair img {
-  width: 48%;
-  max-height: 250px;
-  object-fit: contain;
-  animation: appear 0.8s ease-out both;
-}
-
-.buttons {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  width: min(350px, calc(100vw - 24px));
+  min-height: 0;
+  margin: 0;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 14px;
+  align-items: center;
+  gap: 8px;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  z-index: 1000;
 }
 
-button {
+h1 {
+  font-size: 20px;
+  margin: 0;
+}
+
+/* MESSAGE */
+.message {
   width: 100%;
-  padding: 12px 10px;
+  padding: 5px 0;
+
+  background: transparent;
   border: none;
-  border-radius: 18px;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
+  box-shadow: none;
 
-button:active {
-  transform: scale(0.96);
-}
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.4;
 
-.yes-button {
-  background: #c9f7d5;
-  color: #176d3a;
-  box-shadow: 0 4px 10px rgba(60, 170, 100, 0.15);
-}
+  color: #176b87;
+  text-align: center;
 
-.no-button {
-  background: #d9f2ff;
-  color: #1677a8;
-  box-shadow: 0 4px 10px rgba(50, 140, 190, 0.12);
+  animation: messagePop .5s ease both;
 }
 
 .hidden {
   display: none !important;
 }
 
-.happy-character {
-  animation: happyBounce 0.8s ease-in-out infinite alternate;
+/* CARTOON SCENE */
+.scene {
+  width: 100%;
+  height: 155px;
+  min-height: 155px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  position: relative;
+  overflow: hidden;
+
+  transform-origin: center;
 }
 
-.sad-character {
-  animation: sadMove 0.6s ease-in-out infinite alternate;
+.scene img {
+  display: block;
+
+  width: 100%;
+  max-width: 230px;
+  height: 150px;
+
+  object-fit: contain;
+  border-radius: 12px;
 }
 
-.confetti {
-  position: absolute;
-  top: -15px;
-  width: 9px;
-  height: 12px;
-  border-radius: 2px;
-  animation: confettiFall 2s linear forwards;
-  pointer-events: none;
-  z-index: 5;
+/* TWO BOYS */
+.scene.pair img {
+  width: 49%;
+  height: 135px;
+  max-width: 155px;
 }
 
-.tear {
-  position: absolute;
-  font-size: 24px;
-  animation: tearFall 1.2s ease-in forwards;
-  pointer-events: none;
+/*
+  Walking-style body movement.
+  Static images cannot move their legs independently.
+*/
+.walkingBody {
+  animation: walkBob .48s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+/* WALKING-STYLE BOUNCE */
+@keyframes walkBob {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-3px) rotate(-1deg);
+  }
+
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  75% {
+    transform: translateY(-2px) rotate(1deg);
+  }
+}
+
+/* HOLDING IMAGE WALKS IN */
+.scene.walk-in {
+  animation: walkIn 1.8s ease-out both;
 }
 
 @keyframes walkIn {
-  from {
-    transform: translateX(-380px);
+  0% {
     opacity: 0;
+    transform: translateX(-65px);
   }
 
-  to {
+  30% {
+    opacity: 1;
+    transform: translateX(-45px);
+  }
+
+  65% {
+    opacity: 1;
+    transform: translateX(-12px);
+  }
+
+  100% {
+    opacity: 1;
     transform: translateX(0);
-    opacity: 1;
   }
 }
 
-@keyframes appear {
-  from {
-    transform: scale(0.75);
+/* DRINKING PAIR ENTERS */
+.scene.pairWalkIn {
+  animation: pairWalkIn 1.5s ease-out both;
+}
+
+@keyframes pairWalkIn {
+  0% {
     opacity: 0;
+    transform: translateX(-40px);
   }
 
-  to {
-    transform: scale(1);
+  25% {
     opacity: 1;
+    transform: translateX(-25px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateX(-8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
-@keyframes happyBounce {
-  from {
-    transform: translateY(0);
+/* HAPPY SCENE */
+.scene.happy-scene {
+  animation: happyArrive .9s ease-out both;
+}
+
+@keyframes happyArrive {
+  0% {
+    opacity: 0;
+    transform: scale(.85) translateY(10px);
   }
 
-  to {
-    transform: translateY(-8px);
+  70% {
+    opacity: 1;
+    transform: scale(1.03) translateY(-2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
 }
 
-@keyframes sadMove {
-  from {
-    transform: translateX(-3px);
+/* SAD SCENE */
+.scene.sad-scene {
+  animation: sadPop .7s ease-out both;
+}
+
+@keyframes sadPop {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(.85);
   }
 
-  to {
-    transform: translateX(3px);
+  70% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.03);
   }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* BUTTONS */
+.buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+button {
+  border: none;
+  border-radius: 14px;
+
+  padding: 11px 12px;
+
+  font-size: 13px;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  box-shadow: 0 3px 8px #00000015;
+
+  transition:
+    transform .18s,
+    box-shadow .18s;
+}
+
+button:active {
+  transform: scale(.94);
+}
+
+.yes {
+  background: #b8f2c5;
+  color: #174e2b;
+}
+
+.no {
+  background: #ffe0a8;
+  color: #70420a;
+}
+
+.yes:hover,
+.no:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px #00000020;
+}
+
+.small {
+  font-size: 12px;
+  color: #526b7d;
+  text-align: center;
+}
+
+/* HAPPY DANCE */
+.celebrating {
+  animation: happyDance 1s ease-in-out 2;
+}
+
+@keyframes happyDance {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-5px) rotate(-3deg);
+  }
+
+  50% {
+    transform: translateY(0) rotate(3deg);
+  }
+
+  75% {
+    transform: translateY(-4px) rotate(-2deg);
+  }
+}
+
+/* CONFETTI */
+.confetti {
+  position: fixed;
+  top: -25px;
+
+  width: 10px;
+  height: 16px;
+
+  z-index: 1010;
+  pointer-events: none;
+
+  animation: confettiFall 2.4s linear forwards;
 }
 
 @keyframes confettiFall {
-  from {
-    transform: translateY(-10px) rotate(0deg);
+  0% {
+    transform: translateY(-20px) rotate(0);
     opacity: 1;
   }
 
-  to {
-    transform: translateY(330px) rotate(540deg);
+  100% {
+    transform: translateY(110vh) rotate(900deg);
     opacity: 0;
   }
+}
+
+/* SAD TEARS */
+.tear {
+  position: fixed;
+  top: -25px;
+
+  z-index: 1010;
+  pointer-events: none;
+
+  font-size: 20px;
+
+  animation: tearFall 2.5s linear forwards;
 }
 
 @keyframes tearFall {
-  from {
-    transform: translateY(0);
-    opacity: 1;
+  0% {
+    transform: translateY(0) scale(.7);
+    opacity: 0;
   }
 
-  to {
-    transform: translateY(80px);
+  15% {
+    opacity: .9;
+  }
+
+  100% {
+    transform: translateY(75vh) scale(1.1);
     opacity: 0;
   }
 }
 
-@media (max-width: 360px) {
-  .app {
-    width: 100%;
-    padding: 8px;
+/* SLOW EXIT FOR HAPPY AND OTHER SCENES */
+.scene.leaving {
+  animation: walkOut 2.2s ease-in forwards !important;
+}
+
+@keyframes walkOut {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
   }
 
-  .character-area {
-    min-height: 220px;
+  25% {
+    opacity: 1;
+    transform: translateX(8px);
   }
 
-  .character {
-    max-height: 240px;
-  }
-
-  .drinking-pair img {
-    max-height: 220px;
+  100% {
+    opacity: 0;
+    transform: translateX(110vw);
   }
 }
+
+/* SAD BOYS: HOLD, THEN WALK OUT */
+.scene.sadLeaving {
+  animation: sadWalkOut 3s ease-in-out forwards !important;
+}
+
+@keyframes sadWalkOut {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  25% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(110vw);
+  }
+}
+
+/* MESSAGE ANIMATION */
+@keyframes messagePop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* SMALL SCREENS */
+@media (max-width: 380px) {
+  .app {
+    top: 8px;
+    right: 8px;
+    width: calc(100vw - 16px);
+    padding: 10px;
+  }
+
+  .scene {
+    height: 135px;
+    min-height: 135px;
+  }
+
+  .scene img {
+    height: 130px;
+  }
+
+  .scene.pair img {
+    height: 120px;
+  }
+
+  .message {
+    font-size: 16px;
+  }
+
+  button {
+    padding: 10px;
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+/* Remove the reminder card background completely */
+html,
+body {
+  background: transparent !important;
+}
+
+.app {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+ html,
+body,
+.app,
+#scene,
+#message {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.app {
+  border-radius: 0 !important;
+} 
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<main class="app">
 
-  <div id="status" class="status">
-    Here come your water buddies! 💙
-  </div>
+  <h1>💧 Water Time! 💧</h1>
 
-  <div class="character-area" id="characterArea">
+  <div class="message hidden" id="message"></div>
 
+  <div class="scene walk-in" id="scene">
     <img
-      id="holdingImage"
-      class="character holding-character"
+      class="walkingBody"
       src="boys-holding.png.png"
-      alt="Your water buddies holding water bottles"
+      alt="Both boys holding their water bottles"
     >
-
-    <div id="drinkingPair" class="drinking-pair hidden">
-
-      <img
-        id="boy1Image"
-        src="boy1-drinking.png.png"
-        alt="Boy one drinking water"
-      >
-
-      <img
-        id="boy2Image"
-        src="boy2-drinking.png.png"
-        alt="Boy two drinking water"
-      >
-
-    </div>
-
-    <img
-      id="happyImage"
-      class="character happy-character hidden"
-      src="boys-happy.png.png"
-      alt="Happy water buddies"
-    >
-
-    <img
-      id="sadImage"
-      class="character sad-character hidden"
-      src="boys-sad.png.png"
-      alt="Sad water buddies"
-    >
-
   </div>
 
-  <div id="message" class="message hidden">
-    Amma, it's time to drink your water! 💧
-  </div>
-
-  <div id="buttons" class="buttons hidden">
-
-    <button
-      type="button"
-      class="yes-button"
-      id="yesButton"
-    >
+  <div class="buttons hidden" id="buttons">
+    <button class="yes" onclick="answerYes()">
       💚 YES, I drank it!
     </button>
 
-    <button
-      type="button"
-      class="no-button"
-      id="noButton"
-    >
+    <button class="no" onclick="answerNo()">
       💧 NOT NOW
     </button>
-
   </div>
 
-</div>
+  <div class="small" id="status">
+    Your little water buddies are coming! 💙
+  </div>
 
-<!-- AUDIO FILES -->
+</main>
 
-<audio
-  id="holdingAudio"
-  src="holding.mp3"
-  preload="auto"
-></audio>
-
-<audio
-  id="drinkingAudio"
-  src="drinking.mp3"
-  preload="auto"
-></audio>
-
-<audio
-  id="notNowAudio"
-  src="not-now.mp3"
-  preload="auto"
-></audio>
-
-<audio
-  id="happyAudio"
-  src="happy.mp3"
-  preload="auto"
-></audio>
+<!-- Audio files are in the repository root, alongside index.html -->
+<audio id="holdingAudio" src="holding.mp3" preload="auto"></audio>
+<audio id="drinkingAudio" src="drinking.mp3" preload="auto"></audio>
+<audio id="notNowAudio" src="not-now.mp3" preload="auto"></audio>
+<audio id="happyAudio" src="happy.mp3" preload="auto"></audio>
 
 <script>
-"use strict";
-
-/* =====================================
-   NOVA WATER REMINDER
-   ===================================== */
-
-const REMINDER_AFTER_YES = 60 * 60 * 1000;
-const REMINDER_AFTER_NO = 10 * 60 * 1000;
-const DRINKING_DELAY = 4000;
-
-const holdingImage = document.getElementById("holdingImage");
-const drinkingPair = document.getElementById("drinkingPair");
-const happyImage = document.getElementById("happyImage");
-const sadImage = document.getElementById("sadImage");
-
-const statusText = document.getElementById("status");
-const messageText = document.getElementById("message");
-const buttons = document.getElementById("buttons");
-const characterArea = document.getElementById("characterArea");
-
 const holdingAudio = document.getElementById("holdingAudio");
 const drinkingAudio = document.getElementById("drinkingAudio");
 const notNowAudio = document.getElementById("notNowAudio");
 const happyAudio = document.getElementById("happyAudio");
 
-let reminderTimer = null;
-let drinkingTimer = null;
-let finishTimer = null;
-
-/* =====================================
-   AUDIO CONTROL
-   ===================================== */
-
-const allAudio = [
-  holdingAudio,
-  drinkingAudio,
-  notNowAudio,
-  happyAudio
-];
+const allAudio = [holdingAudio, drinkingAudio, notNowAudio, happyAudio];
 
 function stopAudio() {
-  allAudio.forEach(function(audio) {
+  allAudio.forEach((audio) => {
     audio.pause();
-
-    try {
-      audio.currentTime = 0;
-    } catch (error) {
-      // Audio may not have loaded yet.
-    }
+    audio.currentTime = 0;
   });
 }
 
 function playAudio(audio) {
+  // Stop the previous scene's audio so two files do not overlap.
   stopAudio();
-
-  if (!audio) {
-    return;
-  }
-
-  try {
-    audio.currentTime = 0;
-
-    const playPromise = audio.play();
-
-    if (playPromise && typeof playPromise.catch === "function") {
-      playPromise.catch(function(error) {
-        console.warn("Audio playback was blocked or failed:", error);
-      });
-    }
-  } catch (error) {
-    console.warn("Unable to play audio:", error);
+  const playPromise = audio.play();
+  if (playPromise && typeof playPromise.catch === "function") {
+    playPromise.catch((error) => {
+      console.warn("Audio playback was blocked or failed:", error);
+    });
   }
 }
 
-/* =====================================
-   RESET CHARACTER DISPLAY
-   ===================================== */
+const FILES = {
+  holding: "boys-holding.png.png",
+  boy1: "boy1-drinking.png.png",
+  boy2: "boy2-drinking.png.png",
+  happy: "boys-happy.png.png",
+  sad: "boys-sad.png.png"
+};
 
-function hideAllCharacters() {
-  holdingImage.classList.add("hidden");
-  drinkingPair.classList.add("hidden");
-  happyImage.classList.add("hidden");
-  sadImage.classList.add("hidden");
-}
+const scene = document.getElementById("scene");
+const message = document.getElementById("message");
+const buttons = document.getElementById("buttons");
+const statusText = document.getElementById("status");
+
+let reminderTimer;
+let sceneTimer;
+let confettiTimer;
+let currentSceneToken = 0;
 
 function clearTimers() {
-  if (reminderTimer !== null) {
-    clearTimeout(reminderTimer);
-    reminderTimer = null;
-  }
-
-  if (drinkingTimer !== null) {
-    clearTimeout(drinkingTimer);
-    drinkingTimer = null;
-  }
-
-  if (finishTimer !== null) {
-    clearTimeout(finishTimer);
-    finishTimer = null;
-  }
+  clearTimeout(reminderTimer);
+  clearTimeout(sceneTimer);
+  clearInterval(confettiTimer);
 }
 
-/* =====================================
-   START WATER REMINDER
-   ===================================== */
+function setMessage(text) {
+  message.classList.remove("hidden");
+  message.textContent = text;
 
+  message.style.animation = "none";
+  void message.offsetWidth;
+
+  message.style.animation = "messagePop .5s ease both";
+}
+
+/* SHOW SINGLE IMAGE WITH WALKING-STYLE MOVEMENT */
+function showImage(src, alt, className = "") {
+  scene.className = "scene";
+  scene.innerHTML = "";
+
+  const img = document.createElement("img");
+
+  img.src = src;
+  img.alt = alt;
+  img.className = "walkingBody";
+
+  scene.appendChild(img);
+
+  if (className.includes("sadEntry")) {
+    scene.classList.add("sad-scene");
+  } else if (className.includes("celebrating")) {
+    scene.classList.add("happy-scene");
+  } else {
+    scene.classList.add("walk-in");
+  }
+
+  return img;
+}
+
+/* SHOW BOTH DRINKING IMAGES */
+function showPair() {
+  scene.className = "scene pair pairWalkIn";
+
+  scene.innerHTML = `
+    <img
+      class="walkingBody"
+      src="${FILES.boy1}"
+      alt="First boy drinking water"
+    >
+
+    <img
+      class="walkingBody"
+      src="${FILES.boy2}"
+      alt="Second boy drinking water"
+    >
+  `;
+}
+
+/* START WATER REMINDER */
 function startReminder() {
   clearTimers();
-  stopAudio();
-
-  hideAllCharacters();
-
-  holdingImage.classList.remove("hidden");
-  holdingImage.classList.remove("holding-character");
-
-  // Restart the entrance animation.
-  void holdingImage.offsetWidth;
-
-  holdingImage.classList.add("holding-character");
+  const token = ++currentSceneToken;
+document.querySelector(".app").classList.remove("hidden");
+document.querySelector("h1").classList.remove("hidden");
+statusText.classList.remove("hidden");
+  
+  buttons.classList.add("hidden");
+  message.classList.add("hidden");
 
   statusText.textContent = "Here come your water buddies! 💙";
 
-  messageText.textContent =
-    "Amma, it's time to drink your water! 💧";
-
-  messageText.classList.add("hidden");
-  buttons.classList.add("hidden");
-
-  // Play holding audio when the holding image appears.
   playAudio(holdingAudio);
 
-  // After four seconds, show both boys drinking.
-  drinkingTimer = setTimeout(function() {
-    holdingImage.classList.add("hidden");
+  showImage(
+    FILES.holding,
+    "Both boys holding water bottles",
+    "entering"
+  );
 
-    drinkingPair.classList.remove("hidden");
+  sceneTimer = setTimeout(() => {
+    if (token !== currentSceneToken) return;
 
-    statusText.textContent = "Water time, Amma! 💙";
+    showPair();
 
-    messageText.classList.remove("hidden");
-    buttons.classList.remove("hidden");
-
-    // Play drinking audio when the drinking images appear.
     playAudio(drinkingAudio);
 
-  }, DRINKING_DELAY);
+    // Image and message appear together
+    setMessage("Amma, it's time to drink your water! 💧");
+
+    buttons.classList.remove("hidden");
+    statusText.textContent = "Let's drink water together! 🥤";
+
+  }, 4000);
 }
 
-/* =====================================
-   CONFETTI EFFECT
-   ===================================== */
 
-function createConfetti() {
-  const confettiSymbols = [
-    "💚", "💙", "💧", "✨", "🎉"
+
+/* CONFETTI EFFECT */
+function makeConfetti() {
+  const shapes = [
+    "🎉", "✨", "💚", "💛", "🩷", "🟦"
   ];
 
-  for (let i = 0; i < 24; i++) {
-    const piece = document.createElement("span");
+  for (let i = 0; i < 45; i++) {
+    const piece = document.createElement("div");
 
     piece.className = "confetti";
 
     piece.textContent =
-      confettiSymbols[
-        Math.floor(Math.random() * confettiSymbols.length)
-      ];
+      shapes[Math.floor(Math.random() * shapes.length)];
 
-    piece.style.left = Math.random() * 100 + "%";
-    piece.style.animationDelay = Math.random() * 0.8 + "s";
+    piece.style.left = Math.random() * 100 + "vw";
 
-    characterArea.appendChild(piece);
+    piece.style.animationDelay =
+      Math.random() * .8 + "s";
 
-    setTimeout(function() {
-      piece.remove();
-    }, 3000);
+    piece.style.fontSize =
+      (12 + Math.random() * 14) + "px";
+
+    document.body.appendChild(piece);
+
+    setTimeout(() => piece.remove(), 3500);
   }
 }
 
-/* =====================================
-   TEAR EFFECT
-   ===================================== */
-
-function createTears() {
-  for (let i = 0; i < 6; i++) {
-    const tear = document.createElement("span");
+/* SAD TEARS EFFECT */
+function makeTears() {
+  for (let i = 0; i < 45; i++) {
+    const tear = document.createElement("div");
 
     tear.className = "tear";
     tear.textContent = "💧";
 
-    tear.style.left = (25 + Math.random() * 50) + "%";
-    tear.style.top = (35 + Math.random() * 20) + "%";
-    tear.style.animationDelay = (Math.random() * 0.5) + "s";
+    tear.style.left =
+      (10 + Math.random() * 80) + "vw";
 
-    characterArea.appendChild(tear);
+    tear.style.animationDelay =
+      Math.random() * .5 + "s";
 
-    setTimeout(function() {
-      tear.remove();
-    }, 1800);
+    document.body.appendChild(tear);
+
+    setTimeout(() => tear.remove(), 4500);
   }
 }
 
-/* =====================================
-   YES — I DRANK WATER
-   ===================================== */
+/* SCHEDULE NEXT REMINDER */
+function scheduleReminder(minutes) {
+  clearTimeout(reminderTimer);
 
-function answerYes() {
-  clearTimers();
-  stopAudio();
+  statusText.textContent =
+    "Next water reminder in " + minutes + " minutes 💧";
 
-  hideAllCharacters();
+  reminderTimer = setTimeout(() => {
+    startReminder();
 
-  happyImage.classList.remove("hidden");
+    if (
+      "Notification" in window &&
+      Notification.permission === "granted"
+    ) {
+      new Notification("Water Reminder", {
+        body: "Amma, it's time to drink your water!"
+      });
+    }
 
-  statusText.textContent = "Super Amma! 💚";
+  }, minutes * 60 * 1000);
+}
 
-  messageText.textContent =
-    "Super Amma! You drank your water! 💧 See you in 60 minutes!";
+/* SLOW EXIT */
+function exitAfterScene(minutes) {
+  const token = currentSceneToken;
 
-  messageText.classList.remove("hidden");
+  const isSad = scene.classList.contains("sad-scene");
+
+  if (isSad) {
+    scene.classList.add("sadLeaving");
+  } else {
+    scene.classList.add("leaving");
+  }
+
   buttons.classList.add("hidden");
 
-  // Play happy audio when YES is clicked.
+  // Hide all reminder text when boys leave
+  message.classList.add("hidden");
+  statusText.classList.add("hidden");
+
+  sceneTimer = setTimeout(() => {
+    if (token !== currentSceneToken) return;
+
+    scene.className = "scene";
+    scene.innerHTML = "";
+
+    // Hide the entire reminder content
+    document.querySelector("h1").classList.add("hidden");
+    document.querySelector(".app").classList.add("hidden");
+
+    scheduleReminder(minutes);
+
+  }, isSad ? 3000 : 2200);
+}
+
+  
+
+/* USER DRANK WATER */
+function answerYes() {
+  clearTimeout(sceneTimer);
+
+  ++currentSceneToken;
+
   playAudio(happyAudio);
 
-  createConfetti();
+  setMessage(
+    "Super Amma! 🎉💖 See you in 60 minutes! 💧"
+  );
 
-  finishTimer = setTimeout(function() {
-    stopAudio();
+  buttons.classList.add("hidden");
 
-    startNextReminder(REMINDER_AFTER_YES);
+  showImage(
+    FILES.happy,
+    "Both boys celebrating happily",
+    "drinkEntry celebrating"
+  );
+
+  makeConfetti();
+
+  confettiTimer = setInterval(makeConfetti, 1800);
+
+  statusText.textContent = "Yay! Great job, Amma! 💚";
+
+  sceneTimer = setTimeout(() => {
+    clearInterval(confettiTimer);
+
+    exitAfterScene(60);
+
   }, 3200);
 }
 
-/* =====================================
-   NOT NOW — REMIND AFTER TEN MINUTES
-   ===================================== */
-
+/* USER HAS NOT DRANK WATER */
 function answerNo() {
-  clearTimers();
-  stopAudio();
+  clearTimeout(sceneTimer);
 
-  hideAllCharacters();
+  ++currentSceneToken;
 
-  sadImage.classList.remove("hidden");
-
-  statusText.textContent = "Aww Amma! 🥺💙";
-
-  messageText.textContent =
-    "That's okay, Amma! We'll try again in 10 minutes. 💧";
-
-  messageText.classList.remove("hidden");
-  buttons.classList.add("hidden");
-
-  // Play not-now audio when NOT NOW is clicked.
   playAudio(notNowAudio);
 
-  createTears();
+  setMessage(
+    "It's okay, Amma! We'll come back in 10 minutes. 💧"
+  );
 
-  finishTimer = setTimeout(function() {
-    stopAudio();
+  buttons.classList.add("hidden");
 
-    startNextReminder(REMINDER_AFTER_NO);
+  showImage(
+    FILES.sad,
+    "Both boys looking sad",
+    "sadEntry"
+  );
+
+  makeTears();
+
+  statusText.textContent =
+    "We'll remind you again soon. 💙";
+
+  sceneTimer = setTimeout(() => {
+    exitAfterScene(10);
   }, 4000);
 }
 
-/* =====================================
-   SCHEDULE NEXT REMINDER
-   ===================================== */
-
-function startNextReminder(delay) {
-  clearTimers();
-
-  reminderTimer = setTimeout(function() {
-    startReminder();
-  }, delay);
+/* NOTIFICATION PERMISSION */
+if (
+  "Notification" in window &&
+  Notification.permission === "default"
+) {
+  Notification.requestPermission();
 }
 
-/* =====================================
-   BUTTON EVENTS
-   ===================================== */
-
-document
-  .getElementById("yesButton")
-  .addEventListener("click", answerYes);
-
-document
-  .getElementById("noButton")
-  .addEventListener("click", answerNo);
-
-/* =====================================
-   START APP
-   ===================================== */
-
+/* START APP */
 startReminder();
-
-/* =====================================
-   SERVICE WORKER
-   ===================================== */
-
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function() {
-    navigator.serviceWorker.register("./Service-worker.js")
-      .then(function(registration) {
-        console.log(
-          "Nova Water Reminder service worker registered:",
-          registration.scope
-        );
-      })
-      .catch(function(error) {
-        console.error(
-          "Service worker registration failed:",
-          error
-        );
-      });
-  });
-}
 </script>
 
 </body>

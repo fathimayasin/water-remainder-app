@@ -650,7 +650,7 @@ statusText.classList.remove("hidden");
     "entering"
   );
 
-  sceneTimer = setTimeout(() => {
+    holdingAudio.onended = () => {
     if (token !== currentSceneToken) return;
 
     showPair();
@@ -663,7 +663,7 @@ statusText.classList.remove("hidden");
     buttons.classList.remove("hidden");
     statusText.textContent = "Let's drink water together! 🥤";
 
-  }, 3000);
+  };
 }
 
 
